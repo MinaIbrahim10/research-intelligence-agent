@@ -212,6 +212,18 @@ a {
   color: white;
 }
 
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  line-height: 0;
+}
+
+.github-link svg {
+  display: block;
+}
+
 .live-dot {
   width: 7px;
   height: 7px;
