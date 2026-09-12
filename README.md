@@ -1,8 +1,32 @@
 # Research & Intelligence Agent
 
+[![CI](https://github.com/MinaIbrahim10/research-intelligence-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/MinaIbrahim10/research-intelligence-agent/actions/workflows/ci.yml)
+
 An evidence-first agentic research system that turns an open-ended research question into a structured, cited report with claim-level traceability, verification, coverage-aware confidence, and explicit research gaps.
 
 Instead of asking one LLM call to "research and answer", the system separates planning, search, source fetching, evidence extraction, relevance filtering, claim consolidation, verification, coverage analysis, and reporting into explicit stages.
+
+---
+
+## Product preview
+
+### Research interface
+
+The research interface accepts an open-ended question and launches the evidence-first multi-stage research pipeline.
+
+![Research & Intelligence Agent interface](docs/assets/screenshots/01-hero.png)
+
+### Live agent execution
+
+Progress is driven by real LangGraph node execution rather than simulated timers. Completed, active, and pending stages are surfaced directly in the interface.
+
+![Live agent execution](docs/assets/screenshots/02-live-agent-execution.png)
+
+### Evidence-backed report
+
+The final report exposes source counts, fetched pages, extracted evidence, claim verification status, comparison coverage, and coverage-adjusted confidence.
+
+![Evidence-backed final report](docs/assets/screenshots/03-evidence-backed-report.png)
 
 ---
 
