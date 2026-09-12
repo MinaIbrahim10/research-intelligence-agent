@@ -1,0 +1,18 @@
+use_default_settings: true
+
+general:
+  debug: false
+  instance_name: "Research Intelligence Search"
+
+search:
+  safe_search: 0
+  autocomplete: ""
+  default_lang: "auto"
+  formats:
+    - html
+    - json
+
+server:
+  secret_key: "a50d339a6f5318c9bc7ac3462d517189ec4809ea8a1613c76795d53505578392"
+  limiter: false
+  image_proxy: false

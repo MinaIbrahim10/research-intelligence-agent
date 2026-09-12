@@ -1,0 +1,13 @@
+services:
+  searxng:
+    image: docker.io/searxng/searxng:latest
+    container_name: research-intelligence-searxng
+
+    ports:
+      - "127.0.0.1:8080:8080"
+
+    volumes:
+      - ./infra/searxng/config:/etc/searxng:rw
+      - ./infra/searxng/data:/var/cache/searxng:rw
+
+    restart: unless-stopped

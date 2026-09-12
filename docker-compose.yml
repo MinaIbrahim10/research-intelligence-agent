@@ -1,0 +1,95 @@
+services:
+  searxng:
+    image: docker.io/searxng/searxng:latest
+    container_name: research-intelligence-searxng
+
+    ports:
+      - "127.0.0.1:8080:8080"
+
+    volumes:
+      - ./infra/searxng/config:/etc/searxng:rw
+      - ./infra/searxng/data:/var/cache/searxng:rw
+
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          if command -v wget >/dev/null 2>&1; then
+            wget -q --spider http://127.0.0.1:8080/;
+          elif command -v curl >/dev/null 2>&1; then
+            curl -fsS http://127.0.0.1:8080/ >/dev/null;
+          elif command -v python3 >/dev/null 2>&1; then
+            python3 -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/', timeout=3)";
+          else
+            exit 1;
+          fi
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    restart: unless-stopped
+
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+
+    container_name: research-intelligence-backend
+
+    env_file:
+      - .env
+
+    environment:
+      SEARXNG_BASE_URL: http://searxng:8080
+      LLM_BASE_URL: http://host.docker.internal:11434
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    ports:
+      - "127.0.0.1:8000:8000"
+
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/docs', timeout=3)"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    depends_on:
+      searxng:
+        condition: service_healthy
+
+    restart: unless-stopped
+
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    container_name: research-intelligence-frontend
+
+    ports:
+      - "127.0.0.1:3000:80"
+
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - wget -q --spider http://127.0.0.1/ || exit 1
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+    depends_on:
+      backend:
+        condition: service_healthy
+
+    restart: unless-stopped
